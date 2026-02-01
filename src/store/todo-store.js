@@ -11,6 +11,8 @@ const state = {
     new Todo("Piedra del alma"),
     new Todo("Piedra del infinito"),
     new Todo("Piedra del tiempo"),
+    new Todo("Piedra del poder"),
+    new Todo("Piedra del realidad"),
   ],
   filter: Filters.All,
 };
@@ -24,31 +26,54 @@ const loadStore = () => {
   throw new Error("Not implemented");
 };
 
+const getTodos = (filter = Filters.All) => {
+  switch (filter) {
+    case Filters.All:
+      return [...state.todos];
+
+    case Filters.Completed:
+      return state.todos.filter((todo) => todo.done);
+
+    case Filters.Pending:
+      return state.todos.filter((todo) => !todo.done);
+
+    default:
+      throw new Error(`Option ${filter} is not valid.`);
+  }
+};
+
 /**
  * @param {String} description
  */
 const addTodo = (description) => {
-  throw new Error("Not implemented");
+  if (!description) throw new Error("Description is required");
+
+  state.todos.push(new Todo(description));
 };
 
 const toggleTodo = (todoId) => {
-  throw new Error("Not implemented");
+  state.todos = state.todos.map((todo) => {
+    if (todo.id === todoId) {
+      todo.done = !todo.done;
+    }
+    return todo;
+  });
 };
 
 const deleteTodo = (todoId) => {
-  throw new Error("Not implemented");
+  state.todos = state.todos.filter((todo) => todo.id !== todoId);
 };
 
 const deleteCompleted = () => {
-  throw new Error("Not implemented");
+  state.todos = state.todos.filter((todo) => todo.done);
 };
 
 const setFilter = (newFilter = Filters.All) => {
-  throw new Error("Not implemented");
+  state.filter = newfilter;
 };
 
 const getCurrentFilter = () => {
-  throw new Error("Not implemented");
+  return state.filter;
 };
 
 export default {
@@ -60,4 +85,5 @@ export default {
   deleteTodo,
   deleteCompleted,
   addTodo,
+  getTodos,
 };
